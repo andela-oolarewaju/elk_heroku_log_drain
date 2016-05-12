@@ -1,0 +1,60 @@
+---
+- name: Check if nginx is installed
+  command: bash -c "service --status-all | grep nginx"
+  register: nginx_installed
+  ignore_errors: True
+
+- name: Install necessary packages
+  apt: name=nginx state=present force=yes
+  when: nginx_installed|failed
+
+- name: Create nginx ssl directory
+  file: path=/etc/nginx/ssl state=directory
+  when: nginx_installed|failed
+
+- name: create self-signed SSL cert
+  command: openssl req -new -nodes -x509 -subj "/C=US/ST=Oregon/L=Portland/O=IT/CN"=${ansible_fqdn} -days 3650 -keyout /etc/nginx/ssl/server.key -out /etc/nginx/ssl/server.crt -extensions v3_ca creates=/etc/nginx/ssl/server.crt
+  when: nginx_installed|failed
+  notify: reload nginx
+
+- name: Add nginx server block
+  template: src=stark-wildwood.com dest=/etc/nginx/sites-available/stark-wildwood.com
+
+- name: Check if apache2_utils is installed
+  command: bash -c "dpkg --get-selections | grep apache2-utils"
+  register: apache2_utils_installed
+  ignore_errors: True
+  tags:
+    - apache2_utils_setup
+
+- name: Install apache2-utils
+  apt: name=apache2-utils state=present force=yes
+  when: apache2_utils_installed|failed
+  tags:
+    - apache2_utils_setup
+  
+- name: Start nginx
+  service: name=nginx state=started enabled=yes
+
+- name: Check if python passlib is installed
+  command: bash -c "dpkg --get-selections | grep python-passlib"
+  register: passlib_installed
+  ignore_errors: True
+  tags:
+    - passlib_setup
+
+- name: Install python passlib
+  apt: name=python-passlib state=present force=yes
+  when: passlib_installed|failed
+  tags:
+    - passlib_setup
+
+- name: Create kibana.htpassword
+  htpasswd: path=/etc/nginx/conf.d/kibana.htpasswd name={{username}} password={{password}} crypt_scheme=md5_crypt
+  tags:
+    - kibana.htpassword
+
+- name: Create kibana-write.htpassword
+  htpasswd: path=/etc/nginx/conf.d/kibana-write.htpasswd name={{username}} password={{password}} crypt_scheme=md5_crypt
+  tags:
+    - kibanawrite.htpassword
