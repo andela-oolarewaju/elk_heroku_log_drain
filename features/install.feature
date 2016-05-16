@@ -13,6 +13,7 @@ Feature: Provision and Install
   Scenario: Install logstash
     When I install logstash
     Then it should be successful
+    And logstash etc directory should be present
     And logstash should be running
 
   Scenario: Install kibana

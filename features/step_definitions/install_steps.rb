@@ -45,6 +45,12 @@ When(/^I install logstash$/) do
   output, error, @status = Open3.capture3 "#{cmd}"
 end
 
+And(/^logstash etc directory should be present$/) do
+  output, error, status = Open3.capture3 "unset RUBYLIB; vagrant ssh -c 'ls /etc/logstash/ | grep conf.d'"
+
+  expect(output).to match("conf.d")
+end
+
 When(/^I install kibana$/) do
   cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.kibana.yml"
 
