@@ -83,8 +83,8 @@ And(/^I create ssl certificate$/) do
   expect(output).to match("server.*")
 end
 
-And(/^I create stark-wildwood folder$/) do
-  output, error, status = Open3.capture3 "vagrant ssh -c 'ls /etc/nginx/sites-available | grep stark-wildwood'"
+And(/^I create stark-wildwood file$/) do
+  output, error, status = Open3.capture3 "vagrant ssh -c 'ls /etc/nginx/sites-enabled | grep stark-wildwood'"
   
   expect(output).to match("stark-wildwood")
 end

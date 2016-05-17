@@ -18,7 +18,7 @@
   notify: reload nginx
 
 - name: Add nginx server block
-  template: src=stark-wildwood.com dest=/etc/nginx/sites-available/stark-wildwood.com
+  template: src=stark-wildwood.com dest=/etc/nginx/sites-enabled/stark-wildwood.com
 
 - name: Check if apache2_utils is installed
   command: bash -c "dpkg --get-selections | grep apache2-utils"

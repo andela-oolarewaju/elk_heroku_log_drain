@@ -27,7 +27,7 @@ Feature: Provision and Install
     Then it should be successful
     And nginx should be running
     And I create ssl certificate
-    And I create stark-wildwood folder
+    And I create stark-wildwood file
 
   Scenario: Install apache2-utils
     When I install apache2-utils
