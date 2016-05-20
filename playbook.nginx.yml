@@ -1,9 +1,0 @@
----
-- hosts: all
-  user: vagrant
-  become: yes
-  become_method: sudo
-  vars_files:
-    - "/Users/orezi/Documents/workspace/devOps/elk_secure.yml"
-  roles:
-  - nginx
