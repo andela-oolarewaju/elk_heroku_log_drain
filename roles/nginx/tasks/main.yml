@@ -3,22 +3,32 @@
   command: bash -c "service --status-all | grep nginx"
   register: nginx_installed
   ignore_errors: True
+  tags:
+    - nginx-setup
 
 - name: Install necessary packages
   apt: name=nginx state=present force=yes
   when: nginx_installed|failed
+  tags:
+    - nginx-setup
 
 - name: Create nginx ssl directory
   file: path=/etc/nginx/ssl state=directory
   when: nginx_installed|failed
+  tags:
+    - nginx-setup
 
 - name: create self-signed SSL cert
   command: openssl req -new -nodes -x509 -subj "/C=US/ST=Oregon/L=Portland/O=IT/CN"=${ansible_fqdn} -days 3650 -keyout /etc/nginx/ssl/server.key -out /etc/nginx/ssl/server.crt -extensions v3_ca creates=/etc/nginx/ssl/server.crt
   when: nginx_installed|failed
   notify: reload nginx
+  tags:
+    - nginx-setup
 
 - name: Add nginx server block
   template: src=stark-wildwood.com dest=/etc/nginx/sites-enabled/stark-wildwood.com
+  tags:
+    - nginx-setup
 
 - name: Check if apache2_utils is installed
   command: bash -c "dpkg --get-selections | grep apache2-utils"

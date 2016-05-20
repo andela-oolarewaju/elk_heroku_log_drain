@@ -12,7 +12,7 @@ And(/^I provision it$/) do
 end
 
 When(/^I install elasticsearch$/) do
-  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.elasticsearch.yml"
+  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.main.yml --tags 'elasticsearch-setup'"
 
   output, error, @status = Open3.capture3 "#{cmd}"
 end
@@ -40,7 +40,7 @@ And(/^it should be accepting connections on port ([^"]*)$/) do |port|
 end
 
 When(/^I install logstash$/) do
-  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.logstash.yml"
+  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.main.yml --tags 'logstash-setup'"
 
   output, error, @status = Open3.capture3 "#{cmd}"
 end
@@ -52,27 +52,13 @@ And(/^logstash etc directory should be present$/) do
 end
 
 When(/^I install kibana$/) do
-  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.kibana.yml"
+  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.main.yml --tags 'kibana-setup'"
 
   output, error, @status = Open3.capture3 "#{cmd}"
-end
-
-When(/^I install heroku$/) do
-  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.heroku.yml"
-  
-  output, error, @status = Open3.capture3 "#{cmd}"
-end
-
-And(/^it should be running on kibana$/) do
-  cmd = "opt/logstash/bin/plugin list | grep logstash-input-heroku"
-
-  output, error, status = Open3.capture3 "#{cmd}"
-  
-  expect(output).to match("logstash-input-heroku")
 end
 
 When(/^I install nginx$/) do
-  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.nginx.yml"
+  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.main.yml --tags 'nginx-setup'"
   
   output, error, @status = Open3.capture3 "#{cmd}"
 end
@@ -90,19 +76,19 @@ And(/^I create stark-wildwood file$/) do
 end
 
 When(/^I install apache2-utils$/) do
-  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.nginx.yml --tags 'apache2_utils_setup'"
+  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.main.yml --tags 'apache2_utils_setup'"
   
   output, error, @status = Open3.capture3 "#{cmd}"
 end
 
 When(/^I install python-passlib$/) do
-  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.nginx.yml --tags 'passlib_setup'"
+  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.main.yml --tags 'passlib_setup'"
   
   output, error, @status = Open3.capture3 "#{cmd}"
 end
 
 When(/^I create kibana.htpassword$/) do
-  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.elk.yml --tags 'kibana.htpassword'"
+  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.main.yml --tags 'kibana.htpassword'"
 
   output, error, @status = Open3.capture3 "#{cmd}"
 end
@@ -114,7 +100,7 @@ Then(/^kibana.htpassword file should exist$/) do
 end
 
 When(/^I create kibana-write.htpassword$/) do
-  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.elk.yml --tags 'kibanawrite.htpassword'"
+  cmd = "ansible-playbook -i inventory.ini --private-key=.vagrant/machines/elkserver/virtualbox/private_key -u vagrant playbook.main.yml --tags 'kibanawrite.htpassword'"
 
   output, error, @status = Open3.capture3 "#{cmd}"
 end

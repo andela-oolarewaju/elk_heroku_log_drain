@@ -1,5 +1,5 @@
 ---
-- name: Check if elasticsearch is installed
+- name: Check if kibana is installed
   command: bash -c "service --status-all | grep kibana"
   register: kibana_installed
   ignore_errors: True

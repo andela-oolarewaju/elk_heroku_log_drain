@@ -1,0 +1,6 @@
+---
+#username and password should be hidden
+username: admin
+password: admin
+server_ip: 54.186.164.69
+host_user: ubuntu
