@@ -33,7 +33,7 @@ $ git clone https://github.com/andela-oolarewaju/elk_heroku_log_drain.git
 
 **Set it up**
 ```
-$ cd heroku_log_drain_elk_stack/
+$ cd elk_heroku_log_drain/
 $ vagrant up
 $ vagrant ssh
 $ bundle install
